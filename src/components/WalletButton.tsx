@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useWallet } from '../contexts/WalletContext';
 import WalletModal from './WalletModal';
-import type { WalletType } from '../types/wallet';
 
 const WalletButton: React.FC = () => {
   const { isConnected, isConnecting, connectWallet, disconnectWallet, account } = useWallet();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleConnect = async (walletType: WalletType) => {
+  const handleConnect = async () => {
     try {
-      await connectWallet(walletType);
+      await connectWallet();
       setIsModalOpen(false);
     } catch (error) {
       console.error('连接钱包失败:', error);

@@ -5,9 +5,9 @@ import { SUPPORTED_NETWORKS } from '../types/wallet';
 const NetworkSelector: React.FC = () => {
   const { network, switchNetwork, isConnected } = useWallet();
 
-  const handleNetworkChange = async (chainId: number) => {
+  const handleNetworkChange = async (chainId: string) => {
     try {
-      await switchNetwork(chainId);
+      await switchNetwork(Number(chainId));
     } catch (error) {
       console.error('切换网络失败:', error);
       // 这里可以添加错误提示
@@ -20,12 +20,12 @@ const NetworkSelector: React.FC = () => {
 
   return (
     <div className="flex items-center space-x-3">
-      <label className="text-sm font-medium text-gray-700">
+      <label className="text-sm font-medium text-gray-700 w-16">
         网络:
       </label>
       <select
         value={network?.chainId || ''}
-        onChange={(e) => handleNetworkChange(Number(e.target.value))}
+        onChange={(e) => handleNetworkChange((e.target.value))}
         className="input-field text-sm py-1"
       >
         {Object.values(SUPPORTED_NETWORKS).map((net) => (

@@ -1,10 +1,9 @@
 import React from 'react';
-import type { WalletType } from '../types/wallet';
 
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectWallet: (walletType: WalletType) => void;
+  onSelectWallet: () => void;
   isConnecting: boolean;
 }
 
@@ -16,8 +15,8 @@ const WalletModal: React.FC<WalletModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
-  const handleWalletSelect = (walletType: WalletType) => {
-    onSelectWallet(walletType);
+  const handleWalletSelect = () => {
+    onSelectWallet();
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -46,7 +45,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
 
         <div className="space-y-3">
           <button
-            onClick={() => handleWalletSelect('metamask')}
+            onClick={handleWalletSelect}
             disabled={isConnecting}
             className="btn-wallet disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -68,7 +67,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
           </button>
 
           <button
-            onClick={() => handleWalletSelect('coinbase')}
+            onClick={handleWalletSelect}
             disabled={isConnecting}
             className="btn-wallet disabled:opacity-50 disabled:cursor-not-allowed"
           >

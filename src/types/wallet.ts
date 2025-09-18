@@ -20,7 +20,7 @@ export interface WalletContextType {
   network: Network | null;
   isConnected: boolean;
   isConnecting: boolean;
-  connectWallet: (walletType: 'metamask' | 'coinbase') => Promise<void>;
+  connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
   switchNetwork: (chainId: number) => Promise<void>;
   refreshBalance: () => Promise<void>;
@@ -41,7 +41,7 @@ export const SUPPORTED_NETWORKS: Record<number, Network> = {
     },
   },
   [Number(`${import.meta.env.VITE_SEPOLIA_CHAINID}`)] : {
-    chainId: import.meta.env.VITE_SEPOLIA_URL,
+    chainId: import.meta.env.VITE_SEPOLIA_CHAINID,
     name: 'Sepolia Testnet',
     rpcUrl: import.meta.env.VITE_SEPOLIA_URL,
     blockExplorerUrl: 'https://sepolia.etherscan.io',
