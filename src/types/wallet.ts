@@ -24,6 +24,7 @@ export interface WalletContextType {
   disconnectWallet: () => void;
   switchNetwork: (chainId: number) => Promise<void>;
   refreshBalance: () => Promise<void>;
+  signMessage: (message: string) => Promise<string>;
 }
 
 export type WalletType = 'metamask' | 'coinbase';

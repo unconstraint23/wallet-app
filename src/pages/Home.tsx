@@ -2,6 +2,7 @@ import React from 'react';
 import WalletButton from '../components/WalletButton';
 import NetworkSelector from '../components/NetworkSelector';
 import AccountInfo from '../components/AccountInfo';
+import SignMessage from '../components/SignMessage';
 import { useWallet } from '../contexts/WalletContext';
 
 const Home: React.FC = () => {
@@ -58,6 +59,9 @@ const Home: React.FC = () => {
 
           {/* 账户信息 */}
           {isConnected && <AccountInfo />}
+
+          {/* 签名消息 */}
+          {isConnected && <SignMessage />}
 
           {/* 功能说明 */}
           {!isConnected && (

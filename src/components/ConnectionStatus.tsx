@@ -27,7 +27,7 @@ const ConnectionStatus: React.FC = () => {
       
       return () => clearTimeout(timer);
     }
-  }, [isConnected, account?.address]);
+  }, [isConnected, account]);
 
   if (!showStatus) return null;
 

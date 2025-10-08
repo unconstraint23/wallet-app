@@ -122,6 +122,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
     const handleChainChanged = async (chainId: string) => {
       console.log('链ID变化:', chainId);
+      if (!window.ethereum) return;
       
       // 重新获取网络信息
       try {
@@ -171,7 +172,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
     return () => {
       // 清理事件监听器
-      if (window.ethereum.removeListener) {
+      if (window.ethereum && window.ethereum.removeListener) {
         window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
         window.ethereum.removeListener('chainChanged', handleChainChanged);
         window.ethereum.removeListener('connect', handleConnect);
@@ -278,6 +279,22 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     }
   };
 
+  const signMessage = async (message: string): Promise<string> => {
+    if (!window.ethereum) {
+      throw new Error('请安装MetaMask或Coinbase钱包');
+    }
+
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const signature = await signer.signMessage(message);
+      return signature;
+    } catch (error) {
+      console.error('签名失败:', error);
+      throw error;
+    }
+  };
+
   const value: WalletContextType = {
     account,
     network,
@@ -287,6 +304,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     disconnectWallet,
     switchNetwork,
     refreshBalance,
+    signMessage,
   };
 
   return (
@@ -296,6 +314,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useWallet = (): WalletContextType => {
   const context = useContext(WalletContext);
   if (context === undefined) {
@@ -305,8 +324,15 @@ export const useWallet = (): WalletContextType => {
 };
 
 // 扩展Window接口以支持ethereum
+// 定义一个符合EIP-1193标准的Provider接口
+interface Eip1193Provider {
+  request(args: { method: string; params?: unknown[] }): Promise<unknown>;
+  on<T>(event: string, listener: (...args: T[]) => void): this;
+  removeListener<T>(event: string, listener: (...args: T[]) => void): this;
+}
+
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: Eip1193Provider;
   }
 }
